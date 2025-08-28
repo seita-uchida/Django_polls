@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Choice,Question
 
@@ -30,4 +30,13 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        return redirect('detail', question.id)
+        return redirect('results', question.id)
+    
+
+def results(request, question_id):
+    # question = Question.objects.get(pk=question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    context = {
+        "question": question,
+    }
+    return render(request, "main/results.html", context)
