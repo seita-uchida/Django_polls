@@ -6,6 +6,17 @@
 </head>
 <body>
     <h1>main</h1>
-    <p>main index page</p>
+    <h2>調査項目</h2>
+    {% for question in question_list %}  {# 繰り返し処理 #}
+    <p>Q. {{ question }}</p>
+    {% endfor %}  {# 繰り返し処理終わり #}
+
+    {% if is_polled %}  {# 条件分岐 #}
+        <p>{{ polled_msg }}</p>
+    {% else %}
+        <p>{{ not_polled_msg }}</p>
+    {% endif %}  {# 条件分岐終わり #}
+
+    <a href="{% url 'results' %}">結果</a>  {# results 関数を呼び出す #}
 </body>
 </html>
