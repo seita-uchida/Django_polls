@@ -5,12 +5,20 @@
     <title>投票アプリ</title>
 </head>
 <body>
-    <h1>{{ question.question_text }}</h1>
-    <ul>
-    {% for choice in question.choices.all %}
-        <li>{{ choice.choice_text }}</li>
-    {% endfor %}
-    </ul>
+    <form action="{% url 'vote' question.id %}" method="POST">
+    {% csrf_token %}
+        <div>
+            <h1>{{ question.question_text }}</h1>
+            {% if error_message %}
+                <p><strong>{{ error_message }}</strong></p>
+            {% endif %}
+            {% for choice in question.choices.all %}
+                <input type="radio" name="choice" id="choice{{ choice.id }}" value="{{ choice.id }}">
+                <label for="choice{{ choice.id }}">{{ choice.choice_text }}</label><br>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Vote">
+    </form>
     <a href="{% url 'index' %}">トップへ戻る</a>
 </body>
 </html>

@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from .models import Question
+from .models import Choice,Question
 
 
 def index(request):
@@ -17,3 +17,17 @@ def detail(request, question_id):
         "question": question,
     }
     return render(request, "main/detail.html", context)
+
+def vote(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    try:
+        selected_choice = question.choices.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        return render(request, 'main/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        return redirect('detail', question.id)
